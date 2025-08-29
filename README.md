@@ -84,7 +84,7 @@ section in the Mako documentation.
     Component definition: <code>button.html.mako</code>
   </summary>
 
-  ```html
+  ```mako
   <%def
     name="base_button(
       class_name=None,
@@ -144,7 +144,7 @@ section in the Mako documentation.
     Component usage: <code>page.html.mako</code>
   </summary>
 
-  ```html
+  ```mako
   <%namespace name="button" file="button.html.mako" />
 
   <%button:icon_button class_name="sample-button">
@@ -217,9 +217,6 @@ TEMPLATES = [
     },
 ]
 ```
-
-> [!IMPORTANT]
-> By default, templates within apps should be placed under a `mako` directory.
 
 <details>
   <summary>
@@ -309,6 +306,9 @@ TEMPLATES = [
   ```
 </details>
 
+> [!NOTE]
+> By default, templates within apps should be placed under a `mako` directory.
+
 ## Tutorial
 
 This tutorial guides you through creating a minimal Django project using Mako
@@ -381,7 +381,7 @@ TEMPLATES = [
 
 5. Add layout template `mako/layout.html.mako`:
 
-```html
+```mako
 <!DOCTYPE html>
 <html>
   <head>
@@ -395,7 +395,7 @@ TEMPLATES = [
 
 6. Create page template `index/mako/index/views/index.html.mako`:
 
-```html
+```mako
 <%inherit file="/layout.html.mako" />
 
 <%block name="title">${ title } | ${ parent.title() }</%block>
