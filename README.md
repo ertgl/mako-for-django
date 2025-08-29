@@ -133,10 +133,10 @@ section in the Mako documentation.
   </%def>
   ```
 
-  > [!TIP]
-  > The `clsx` function is imported from
+  > The `clsx` function is a utility for managing class-names dynamically. It's
+  > imported from the
   > <a href="https://github.com/ertgl/clsx-py" target="_blank">clsx-py</a>
-  > project, to manage class names dynamically.
+  > project.
 </details>
 
 <details>
