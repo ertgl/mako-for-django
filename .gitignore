@@ -1,6 +1,9 @@
 # Cache directory, for CI
 /.cache/
 
+# Distribution files
+/dist/
+
 # Mypy artifacts
 .dmypy.json
 .mypy_cache/

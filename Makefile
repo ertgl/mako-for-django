@@ -10,6 +10,10 @@ HACK_SCRIPTS_DIR := $(HACK_DIR)/scripts
 VENV_DIR_NAME := .venv
 VENV_DIR := $(PROJECT_DIR)/$(VENV_DIR_NAME)
 
+DIST_DIR := $(PROJECT_DIR)/dist
+
+PYPI_PACKAGE_NAME := mako-for-django
+
 GLOBAL_PYTHON ?= $(shell which python)
 PYTHON := $(VENV_DIR)/bin/python
 
@@ -87,5 +91,20 @@ test: e2e.test
 .PHONY: check
 check: lint test
 
+.PHONY: build
+build:
+	$(UV) build $(PROJECT_DIR) --package $(PYPI_PACKAGE_NAME)
+
+.PHONY: build.clean
+build.clean:
+	rm -fr $(DIST_DIR)
+
+.PHONY: publish
+publish:
+	$(UV) publish
+
 .PHONY: all
 all: prepare
+
+.PHONY: clean
+clean: build.clean
