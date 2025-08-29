@@ -1,0 +1,23 @@
+extend-include = ["*.ipynb"]
+show-fixes = true
+src = ["src"]
+
+[lint]
+extend-select = ["I"]
+preview = true
+
+[lint.isort]
+case-sensitive = true
+combine-as-imports = true
+default-section = "third-party"
+from-first = false
+known-first-party = ["django_mako"]
+lines-after-imports = 2
+lines-between-types = 1
+section-order = [
+  "future",
+  "standard-library",
+  "third-party",
+  "first-party",
+  "local-folder",
+]

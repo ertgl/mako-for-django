@@ -1,0 +1,28 @@
+[build-system]
+requires = ["uv_build>=0.8.11,<0.9.0"]
+build-backend = "uv_build"
+
+[project]
+name = "mako-for-django-e2e"
+version = "0.0.0"
+description = ""
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+  "mako-for-django-e2e[clsx]",
+  "mako-for-django-e2e[django]",
+  "mako-for-django-e2e[mako]",
+]
+classifiers = ["Private :: Do Not Upload"]
+
+[project.optional-dependencies]
+clsx = ["clsx>=0.1.1"]
+django = ["django>=5.2.5", "django-stubs-ext>=5.2.2"]
+mako = ["mako-for-django"]
+
+[tool.uv.build-backend]
+module-name = "django_mako_e2e"
+module-root = "src"
+
+[tool.uv.sources]
+mako-for-django = { path = "..", editable = true }

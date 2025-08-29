@@ -1,0 +1,137 @@
+name: Setup CI
+description: Setup CI environment with a reusable composite action.
+
+runs:
+  using: composite
+  steps:
+    - name: Determine cache key for uv
+      id: determine-cache-key-for-uv
+      env:
+        CACHE_KEY_FOR_UV: ${{ format('uv:{0}:{1}', runner.os, hashFiles('uv.lock', 'e2e/uv.lock')) }}
+      shell: bash
+      run: echo "cache-key-for-uv=$(echo "$CACHE_KEY_FOR_UV")" >> $GITHUB_OUTPUT
+
+    - name: Determine uv cache directory path
+      id: determine-uv-cache-directory-path
+      env:
+        UV_CACHE_DIRECTORY_PATH: ${{ env.UV_CACHE_DIR }}
+      shell: bash
+      run: echo "uv-cache-directory-path=$(echo "${UV_CACHE_DIRECTORY_PATH}")" >> $GITHUB_OUTPUT
+
+    - name: Determine cache key for virtual environment
+      id: determine-cache-key-for-virtual-environment
+      env:
+        CACHE_KEY_FOR_VIRTUAL_ENVIRONMENT: ${{ format('virtual-environment:{0}:{1}', runner.os, hashFiles('uv.lock')) }}
+      shell: bash
+      run: echo "cache-key-for-virtual-environment=$(echo "$CACHE_KEY_FOR_VIRTUAL_ENVIRONMENT")" >> $GITHUB_OUTPUT
+
+    - name: Determine virtual environment directory path
+      id: determine-virtual-environment-directory-path
+      env:
+        VIRTUAL_ENVIRONMENT_DIRECTORY_PATH: .venv
+      shell: bash
+      run: echo "virtual-environment-directory-path=$(echo "$VIRTUAL_ENVIRONMENT_DIRECTORY_PATH")" >> $GITHUB_OUTPUT
+
+    - name: Determine cache key for E2E virtual environment
+      id: determine-cache-key-for-e2e-virtual-environment
+      env:
+        CACHE_KEY_FOR_E2E_VIRTUAL_ENVIRONMENT: ${{ format('e2e:virtual-environment:{0}:{1}', runner.os, hashFiles('e2e/uv.lock')) }}
+      shell: bash
+      run: echo "cache-key-for-e2e-virtual-environment=$(echo "$CACHE_KEY_FOR_E2E_VIRTUAL_ENVIRONMENT")" >> $GITHUB_OUTPUT
+
+    - name: Determine E2E virtual environment directory path
+      id: determine-e2e-virtual-environment-directory-path
+      env:
+        E2E_VIRTUAL_ENVIRONMENT_DIRECTORY_PATH: e2e/.venv
+      shell: bash
+      run: echo "e2e-virtual-environment-directory-path=$(echo "$E2E_VIRTUAL_ENVIRONMENT_DIRECTORY_PATH")" >> $GITHUB_OUTPUT
+
+    - name: Setup Python
+      id: setup-python
+      uses: actions/setup-python@v5
+      with:
+        python-version-file: ".python-version"
+
+    - name: Setup uv
+      id: setup-uv
+      uses: astral-sh/setup-uv@v6
+      with:
+        cache-local-path: ${{ steps.determine-uv-cache-directory-path.outputs.uv-cache-directory-path }}
+        enable-cache: false
+        ignore-nothing-to-cache: true
+        prune-cache: false
+        version: ">=0.8"
+
+    - name: Restore virtual environment
+      id: restore-virtual-environment
+      uses: actions/cache/restore@v4
+      with:
+        key: ${{ steps.determine-cache-key-for-virtual-environment.outputs.cache-key-for-virtual-environment }}
+        path: ${{ steps.determine-virtual-environment-directory-path.outputs.virtual-environment-directory-path }}
+
+    - name: Restore uv cache
+      id: restore-uv-cache
+      if: steps.restore-virtual-environment.outputs.cache-hit != 'true'
+      uses: actions/cache/restore@v4
+      with:
+        key: ${{ steps.determine-cache-key-for-uv.outputs.cache-key-for-uv }}
+        path: ${{ steps.determine-uv-cache-directory-path.outputs.uv-cache-directory-path }}
+
+    - name: Create virtual environment
+      id: create-virtual-environment
+      if: steps.restore-virtual-environment.outputs.cache-hit != 'true'
+      shell: bash
+      run: make venv
+
+    - name: Prepare project
+      id: prepare-project
+      shell: bash
+      run: make prepare.frozen
+
+    - name: Restore E2E virtual environment
+      id: restore-e2e-virtual-environment
+      uses: actions/cache/restore@v4
+      with:
+        key: ${{ steps.determine-cache-key-for-e2e-virtual-environment.outputs.cache-key-for-e2e-virtual-environment }}
+        path: ${{ steps.determine-e2e-virtual-environment-directory-path.outputs.e2e-virtual-environment-directory-path }}
+
+    - name: Create E2E virtual environment
+      id: create-e2e-virtual-environment
+      if: steps.restore-e2e-virtual-environment.outputs.cache-hit != 'true'
+      shell: bash
+      run: make e2e.venv
+
+    - name: Prepare E2E project
+      id: prepare-e2e-project
+      shell: bash
+      run: make e2e.prepare.frozen
+
+    - name: Minimize uv cache
+      id: minimize-uv-cache
+      if: steps.restore-virtual-environment.outputs.cache-hit != 'true' || steps.restore-e2e-virtual-environment.outputs.cache-hit != 'true'
+      shell: bash
+      run: uv cache prune --ci
+
+    - name: Cache virtual environment
+      id: cache-virtual-environment
+      if: steps.create-virtual-environment.conclusion == 'success'
+      uses: actions/cache/save@v4
+      with:
+        key: ${{ steps.determine-cache-key-for-virtual-environment.outputs.cache-key-for-virtual-environment }}
+        path: ${{ steps.determine-virtual-environment-directory-path.outputs.virtual-environment-directory-path }}
+
+    - name: Cache E2E virtual environment
+      id: cache-e2e-virtual-environment
+      if: steps.create-e2e-virtual-environment.conclusion == 'success'
+      uses: actions/cache/save@v4
+      with:
+        key: ${{ steps.determine-cache-key-for-e2e-virtual-environment.outputs.cache-key-for-e2e-virtual-environment }}
+        path: ${{ steps.determine-e2e-virtual-environment-directory-path.outputs.e2e-virtual-environment-directory-path }}
+
+    - name: Save uv cache
+      id: cache-uv-cache
+      if: steps.minimize-uv-cache.conclusion == 'success'
+      uses: actions/cache/save@v4
+      with:
+        key: ${{ steps.determine-cache-key-for-uv.outputs.cache-key-for-uv }}
+        path: ${{ steps.determine-uv-cache-directory-path.outputs.uv-cache-directory-path }}

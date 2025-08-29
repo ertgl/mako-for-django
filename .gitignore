@@ -1,0 +1,21 @@
+# Cache directory, for CI
+/.cache/
+
+# Mypy artifacts
+.dmypy.json
+.mypy_cache/
+
+# Python artifacts
+*.egg-info/
+*.pyc
+*.pyo
+__pycache__/
+
+# Rope artifacts
+.ropeproject/
+
+# Ruff artifacts
+.ruff_cache/
+
+# Virtual environment
+.venv/

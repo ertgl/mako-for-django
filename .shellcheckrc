@@ -1,0 +1,4 @@
+external-sources=true
+require-variable-braces=true
+shell=bash
+source-path=.

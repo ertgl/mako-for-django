@@ -1,0 +1,53 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    shell: bash
+
+env:
+  BASH_ENV: ${{ github.workspace }}/hack/env/bash.sh
+  CI: true
+  UV_CACHE_DIR: ${{ github.env.UV_CACHE_DIR || '/tmp/.uv-cache' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup
+        uses: ./.github/actions/ci-setup
+
+  lint:
+    if: ${{ needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup
+        uses: ./.github/actions/ci-setup
+      - name: Lint
+        run: make lint
+
+  test:
+    if: ${{ needs.build.result == 'success' }}
+    runs-on: ubuntu-latest
+    needs: [build]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+      - name: Setup
+        uses: ./.github/actions/ci-setup
+      - name: Test
+        run: make test
