@@ -74,7 +74,7 @@ requires-dist = [
     { name = "mako", marker = "extra == 'mako'", specifier = ">=1.3.10" },
     { name = "mako-for-django", extras = ["mako"] },
     { name = "mypy", marker = "extra == 'mypy'", specifier = ">=2.1.0" },
-    { name = "ruff", marker = "extra == 'ruff'", specifier = ">=0.12.9" },
+    { name = "ruff", marker = "extra == 'ruff'", specifier = ">=0.15.20" },
 ]
 provides-extras = ["django", "mako", "mypy", "ruff"]
 
