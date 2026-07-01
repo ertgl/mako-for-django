@@ -70,7 +70,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "django", marker = "extra == 'django'", specifier = ">=5.2.5" },
-    { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'mypy'", specifier = ">=5.2.2" },
+    { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'mypy'", specifier = ">=6.0.6" },
     { name = "mako", marker = "extra == 'mako'", specifier = ">=1.3.10" },
     { name = "mako-for-django", extras = ["mako"] },
     { name = "mypy", marker = "extra == 'mypy'", specifier = ">=2.1.0" },
