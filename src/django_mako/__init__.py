@@ -1,7 +1,7 @@
 __all__ = [
+    "VERSION_INFO",
     "MakoEngine",
     "MakoTemplateWrapper",
-    "VERSION_INFO",
     "__version__",
 ]
 
