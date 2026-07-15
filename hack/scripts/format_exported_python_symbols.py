@@ -28,10 +28,10 @@ import operator
 import re
 import sys
 
+from collections.abc import Iterable
 from contextlib import suppress
 from pathlib import Path
 from typing import (
-    Iterable,
     TextIO,
     cast,
 )
@@ -116,7 +116,7 @@ def collect_existing_exported_symbols(source: str) -> set[tuple[int, str]]:
 
 def collect_imported_symbols(source: str) -> set[tuple[int, str]]:
     imported_symbols: set[tuple[int, str]] = set()
-    lines = list(map(lambda line: line.strip(), source.split("\n")))
+    lines = [line.strip() for line in source.split("\n")]
     for line_no, line in enumerate(lines):
         if line.startswith("from"):
             parts = line.split(" ", maxsplit=3)
@@ -204,8 +204,8 @@ def process_stdin(argv: list[str]) -> int:
     )
     try:
         write(sys.stdout, output)
-    except Exception as error:
-        write(sys.stderr, f"{str(error)}\n")
+    except Exception as error:  # ruff:ignore[blind-except]
+        write(sys.stderr, f"{error!s}\n")
         with suppress(Exception):
             write(sys.stdout, source)
         return 1
@@ -234,11 +234,10 @@ def process_source_file(source_file_path: Path) -> int:
     try:
         with source_file_path.open("w") as source_file:
             write(source_file, output)
-    except Exception as error:
-        write(sys.stderr, f"{str(error)}\n")
-        with suppress(Exception):
-            with source_file_path.open("w") as source_file:
-                write(source_file, source)
+    except Exception as error:  # ruff:ignore[blind-except]
+        write(sys.stderr, f"{error!s}\n")
+        with suppress(Exception), source_file_path.open("w") as source_file:
+            write(source_file, source)
         return 1
     return 0
 

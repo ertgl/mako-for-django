@@ -179,10 +179,10 @@ class MakoExceptionInfo:
     ) -> tuple[Any, Any, Any, Any] | None:
         for frame in traceback.records[::-1]:
             (
-                filename,
-                lineno,
-                function,
-                line,
+                _filename,
+                _lineno,
+                _function,
+                _line,
                 template_filename,
                 template_lineno,
                 template_line,

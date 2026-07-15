@@ -5,6 +5,7 @@ from types import TracebackType
 from typing import (
     TYPE_CHECKING,
     Optional,
+    Self,
     cast,
 )
 
@@ -114,14 +115,14 @@ class MakoExceptionHandler(
         self.template = template
         self.uri = uri
 
-    def __enter__[C: "MakoExceptionHandler"](self: C) -> C:
+    def __enter__(self) -> Self:
         return self
 
     def __exit__(
         self,
-        exception_type: Optional[type[BaseException]],
-        exception: Optional[BaseException],
-        traceback: Optional[TracebackType],
+        exception_type: type[BaseException] | None,
+        exception: BaseException | None,
+        traceback: TracebackType | None,
     ) -> None:
         if exception is None:
             return
