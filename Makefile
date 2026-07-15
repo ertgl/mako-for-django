@@ -72,10 +72,6 @@ ruff.format: $(RUFF)
 mypy.lint: $(MYPY)
 	$(MYPY) .
 
-.PHONY: format_exported_python_symbols
-format_exported_python_symbols: $(PYTHON)
-	$(PYTHON) $(HACK_SCRIPTS_DIR)/format_exported_python_symbols.py
-
 .PHONY: lint
 lint: ruff.lint mypy.lint
 
@@ -83,7 +79,7 @@ lint: ruff.lint mypy.lint
 lint.fix: ruff.lint.fix
 
 .PHONY: format
-format: ruff.lint.fix format_exported_python_symbols ruff.format
+format: ruff.lint.fix ruff.format
 
 .PHONY: test
 test: e2e.test

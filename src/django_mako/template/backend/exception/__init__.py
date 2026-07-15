@@ -1,7 +1,7 @@
 __all__ = [
     "LOOKUP_EXCEPTION_TYPES",
-    "MakoExceptionHandler",
     "POSITIONAL_EXCEPTION_TYPES",
+    "MakoExceptionHandler",
 ]
 
 from django_mako.template.backend.exception.lookup_exception_types import (

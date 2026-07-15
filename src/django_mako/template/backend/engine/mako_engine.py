@@ -1,9 +1,9 @@
 __all__ = ["MakoEngine"]
 
+from collections.abc import Callable
 from functools import cached_property
 from typing import (
     Any,
-    Callable,
 )
 
 from django.conf import settings
@@ -41,10 +41,7 @@ class MakoEngine(
 
         options = params.pop("OPTIONS", {}).copy()
 
-        super(
-            MakoEngine,
-            self,
-        ).__init__(
+        super().__init__(
             params,
         )
 
@@ -110,13 +107,5 @@ class MakoEngine(
         self,
         template: Template,
     ) -> None:
-        setattr(
-            template,
-            "backend",
-            self,
-        )
-        setattr(
-            template,
-            "origin",
-            MakoTemplateOrigin.from_template(template),
-        )
+        template.backend = self
+        template.origin = MakoTemplateOrigin.from_template(template)

@@ -3,6 +3,7 @@ __all__ = ["MakoTemplateOrigin"]
 from typing import (
     TYPE_CHECKING,
     Optional,
+    Self,
 )
 
 from django.template.base import UNKNOWN_SOURCE
@@ -22,10 +23,10 @@ class MakoTemplateOrigin:
     template_name: str | None
 
     @classmethod
-    def from_template[C: "MakoTemplateOrigin"](
-        cls: type[C],
+    def from_template(
+        cls,
         template: Template,
-    ) -> C:
+    ) -> Self:
         return cls(
             template.filename,
             backend=template.backend,

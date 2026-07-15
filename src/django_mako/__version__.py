@@ -10,5 +10,5 @@ __version__ = "1.0.0"
 
 VERSION_INFO = cast(
     tuple[int, int, int],
-    tuple(map(int, __version__.split("."))),
+    tuple(map(int, __version__.split("."))),  # ruff:ignore[map-int-version-parsing]
 )

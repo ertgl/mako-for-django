@@ -28,7 +28,7 @@ posts = [Post(title=f"Post {i + 1}") for i in range(10)]
 class CLSXIntegrationView(TemplateView):
     template_name = "/samples/views/clsx-integration.html.mako"
 
-    extra_context = {
+    extra_context = {  # ruff:ignore[mutable-class-default]
         "clsx": clsx,
         "posts": posts,
     }
