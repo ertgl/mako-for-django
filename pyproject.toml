@@ -32,7 +32,7 @@ classifiers = [
 [project.optional-dependencies]
 django = ["django>=6.0.7"]
 mako = ["mako>=1.4.1"]
-mypy = ["django-stubs[compatible-mypy]>=6.0.7", "mypy>=2.3.0"]
+mypy = ["django-stubs[compatible-mypy]>=6.0.8", "mypy>=2.3.0"]
 ruff = ["ruff>=0.16.1"]
 
 [project.urls]
