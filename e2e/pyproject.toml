@@ -17,7 +17,7 @@ classifiers = ["Private :: Do Not Upload"]
 
 [project.optional-dependencies]
 clsx = ["clsx>=0.1.1"]
-django = ["django>=6.0.7", "django-stubs-ext>=6.0.8"]
+django = ["django>=6.1", "django-stubs-ext>=6.0.8"]
 mako = ["mako-for-django"]
 
 [tool.uv.build-backend]
