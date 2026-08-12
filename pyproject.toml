@@ -33,7 +33,7 @@ classifiers = [
 django = ["django>=6.1"]
 mako = ["mako>=1.4.1"]
 mypy = ["django-stubs[compatible-mypy]>=6.0.9", "mypy>=2.3.0"]
-ruff = ["ruff>=0.16.1"]
+ruff = ["ruff>=0.16.2"]
 
 [project.urls]
 Homepage = "https://github.com/ertgl/mako-for-django"
