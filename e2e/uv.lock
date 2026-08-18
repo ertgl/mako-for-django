@@ -73,7 +73,7 @@ requires-dist = [
     { name = "django-stubs", extras = ["compatible-mypy"], marker = "extra == 'mypy'", specifier = ">=6.1.0" },
     { name = "mako", marker = "extra == 'mako'", specifier = ">=1.4.1" },
     { name = "mako-for-django", extras = ["mako"] },
-    { name = "mypy", marker = "extra == 'mypy'", specifier = ">=2.3.0" },
+    { name = "mypy", marker = "extra == 'mypy'", specifier = ">=2.3.1" },
     { name = "ruff", marker = "extra == 'ruff'", specifier = ">=0.16.3" },
 ]
 provides-extras = ["django", "mako", "mypy", "ruff"]
